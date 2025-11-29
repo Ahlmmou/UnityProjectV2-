@@ -3,11 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class MenuReturn : MonoBehaviour
 {
-    [SerializeField] private string menuSceneName = "BasicScene";
-
-    public void BackToMenu()
+    void Update()
     {
-        Debug.Log("Button clicked!");
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Debug.Log("BACK TO MENU (W KEY)");
+            SceneManager.LoadScene("BasicScene");
+        }
     }
-
 }

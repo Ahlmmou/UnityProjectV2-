@@ -10,6 +10,7 @@ TagManager:
   - Chaperone
   - Block
   - EndEffector
+  - Hazard
   layers:
   - Default
   - TransparentFX

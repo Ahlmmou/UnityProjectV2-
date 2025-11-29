@@ -127,11 +127,17 @@ public class EndEffectorErrorUI : MonoBehaviour
         resultText.gameObject.SetActive(true);
 
         resultText.text =
-            $"<b>{activeTarget.name} Error Results</b>\n\n" +
-            $"EE Position:       ({eePos.x:F3}, {eePos.y:F3}, {eePos.z:F3})\n" +
-            $"Target Position:   ({tgtPos.x:F3}, {tgtPos.y:F3}, {tgtPos.z:F3})\n\n" +
-            $"Δ Vector:          ({error.x:F3}, {error.y:F3}, {error.z:F3}) m\n" +
-            $"Distance |Δ|:      <b>{magnitude:F3} m</b>\n\n" +
-            $"Axis Errors: X={axisAbs.x:F3}, Y={axisAbs.y:F3}, Z={axisAbs.z:F3}";
+    $"<b>{activeTarget.name} ERROR RESULTS</b>\n\n" +
+    $"<b>EE POSITION:</b>\n" +
+    $"({eePos.x:F3}, {eePos.y:F3}, {eePos.z:F3})\n\n" +
+    $"<b>TARGET POSITION:</b>\n" +
+    $"({tgtPos.x:F3}, {tgtPos.y:F3}, {tgtPos.z:F3})\n\n" +
+    $"<b>Δ VECTOR:</b>\n" +
+    $"({error.x:F3}, {error.y:F3}, {error.z:F3}) m\n\n" +
+    $"<b>DISTANCE |Δ|:</b>  {magnitude:F3} m\n\n" +
+    $"<b>AXIS ERRORS:</b>\n" +
+    $"X = {axisAbs.x:F3}\n" +
+    $"Y = {axisAbs.y:F3}\n" +
+    $"Z = {axisAbs.z:F3}";
     }
 }

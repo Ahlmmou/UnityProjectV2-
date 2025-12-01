@@ -53,7 +53,7 @@ public class ManualTrackingLogger : MonoBehaviour
     void Update()
     {
         // Start logging on S
-        if (!isLogging && Input.GetKeyDown(KeyCode.S))
+        if (!isLogging && Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.S))
         {
             isLogging = true;
             startTime = Time.time;
@@ -62,7 +62,7 @@ public class ManualTrackingLogger : MonoBehaviour
         }
 
         // Stop logging on K (optional)
-        if (isLogging && Input.GetKeyDown(KeyCode.K))
+        if (isLogging && Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.K))
         {
             isLogging = false;
             Debug.Log("ManualTrackingLogger: Logging STOPPED");

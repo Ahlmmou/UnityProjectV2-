@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using Assets.Scripts;
 
 public class ChatInputRouter : MonoBehaviour
 {

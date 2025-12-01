@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +21,7 @@ namespace Assets.Scripts
 
         void Update()
         {
-
-            if (Input.GetKeyDown(KeyCode.H))
+            if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.H))
             {
                 isOpen = !isOpen;
                 terminalPanel.SetActive(isOpen);
@@ -30,7 +29,7 @@ namespace Assets.Scripts
             }
 
             // Submit on Enter
-            if (isOpen && Input.GetKeyDown(KeyCode.Return))
+            if (isOpen && Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Return))
             {
                 string message = inputField.text;
                 if (!string.IsNullOrEmpty(message))
@@ -38,7 +37,14 @@ namespace Assets.Scripts
                     outputText.text += "\n> " + message;
                     inputField.text = "";
                     inputField.ActivateInputField();
-                    StartCoroutine(gemini.SendMessageToGemini(message, DisplayResponse));
+                    
+                    // Use new SendMessage API with callbacks
+                    gemini.SendMessage(message, 
+                        onComplete: DisplayResponse,
+                        onError: (error) => {
+                            outputText.text += "\nError: " + error;
+                        }
+                    );
                 }
             }
         }
@@ -46,6 +52,14 @@ namespace Assets.Scripts
         void DisplayResponse(string response)
         {
             outputText.text += "\n" + response;
+        }
+        
+        /// <summary>
+        /// Check if this terminal's input field is currently active
+        /// </summary>
+        public bool IsInputActive()
+        {
+            return isOpen && inputField != null && inputField.isFocused;
         }
     }
 

@@ -51,7 +51,7 @@ public class ChatbotActivator : MonoBehaviour
             // Optionally show a prompt like "Press X to chat" (requires a UI Text element)
 
             // Check for the activation key press
-            if (Input.GetKeyDown(activationKey))
+            if (Assets.Scripts.GlobalInputManager.GetKeyDown(activationKey))
             {
                 // Toggle the chat panel visibility
                 if (chatPanel != null)

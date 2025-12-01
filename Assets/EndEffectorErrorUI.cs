@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
 public class EndEffectorErrorUI : MonoBehaviour
@@ -39,30 +39,30 @@ public class EndEffectorErrorUI : MonoBehaviour
         ForceEnableUI();
 
         UpdateStatus("Target A Selected");
-        resultText.text = "Awaiting movement…";
+        resultText.text = "Awaiting movement�";
     }
 
     void Update()
     {
         // Switch target A
-        if (Input.GetKeyDown(targetAKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(targetAKey))
         {
-            Debug.Log("C pressed → Target A selected");
+            Debug.Log("C pressed ? Target A selected");
             SetActiveTarget(targetA, "Target A Selected");
         }
 
         // Switch target B
-        if (Input.GetKeyDown(targetBKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(targetBKey))
         {
-            Debug.Log("V pressed → Target B selected");
+            Debug.Log("V pressed ? Target B selected");
             SetActiveTarget(targetB, "Target B Selected");
         }
 
         // Measure error
-        if (Input.GetKeyDown(measureKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(measureKey))
         {
-            Debug.Log("E pressed → Calculating error");
-            UpdateStatus("Movement Logged. Calculating Error…");
+            Debug.Log("E pressed ? Calculating error");
+            UpdateStatus("Movement Logged. Calculating Error�");
             ComputeAndDisplayError();
         }
     }
@@ -71,7 +71,7 @@ public class EndEffectorErrorUI : MonoBehaviour
     {
         activeTarget = target;
         UpdateStatus(msg);
-        resultText.text = "Awaiting movement…";
+        resultText.text = "Awaiting movement�";
     }
 
     void UpdateStatus(string msg)
@@ -132,9 +132,9 @@ public class EndEffectorErrorUI : MonoBehaviour
     $"({eePos.x:F3}, {eePos.y:F3}, {eePos.z:F3})\n\n" +
     $"<b>TARGET POSITION:</b>\n" +
     $"({tgtPos.x:F3}, {tgtPos.y:F3}, {tgtPos.z:F3})\n\n" +
-    $"<b>Δ VECTOR:</b>\n" +
+    $"<b>? VECTOR:</b>\n" +
     $"({error.x:F3}, {error.y:F3}, {error.z:F3}) m\n\n" +
-    $"<b>DISTANCE |Δ|:</b>  {magnitude:F3} m\n\n" +
+    $"<b>DISTANCE |?|:</b>  {magnitude:F3} m\n\n" +
     $"<b>AXIS ERRORS:</b>\n" +
     $"X = {axisAbs.x:F3}\n" +
     $"Y = {axisAbs.y:F3}\n" +

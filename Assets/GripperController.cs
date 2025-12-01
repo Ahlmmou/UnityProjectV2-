@@ -27,7 +27,7 @@ public class GripperController : MonoBehaviour
         eeVelocity = (graspPoint.position - lastPos) / Mathf.Max(Time.deltaTime, 1e-6f);
         lastPos = graspPoint.position;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Space))
         {
             if (heldBody) Release();
             else TryGrasp();

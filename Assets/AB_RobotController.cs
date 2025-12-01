@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class AB_RobotController : MonoBehaviour
 {
-    [Header("Assign rotating joints in order (Link1 .. EndEff) — DO NOT include the fixed base")]
+    [Header("Assign rotating joints in order (Link1 .. EndEff) � DO NOT include the fixed base")]
     public ArticulationBody[] joints;   //
 
     [Header("Motion Speeds")]
@@ -13,7 +13,7 @@ public class AB_RobotController : MonoBehaviour
     [Tooltip("Hold Alt to go slower (multiplies speed).")]
     public float altMultiplier = 0.5f;   // fine control
 
-    [Header("Keys (+/- per joint) — T/Y/U/I/O = right, G/H/J/K/L = left")]
+    [Header("Keys (+/- per joint) � T/Y/U/I/O = right, G/H/J/K/L = left")]
     public KeyCode[] increaseKeys = { KeyCode.T, KeyCode.Y, KeyCode.U, KeyCode.I, KeyCode.O };
     public KeyCode[] decreaseKeys = { KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L };
 
@@ -47,8 +47,8 @@ public class AB_RobotController : MonoBehaviour
         if (targets == null || joints == null) return;
 
         float mult = 1f;
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) mult *= shiftMultiplier;
-        if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) mult *= altMultiplier;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.LeftShift) || Assets.Scripts.GlobalInputManager.GetKey(KeyCode.RightShift)) mult *= shiftMultiplier;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.LeftAlt) || Assets.Scripts.GlobalInputManager.GetKey(KeyCode.RightAlt)) mult *= altMultiplier;
 
         float step = speedDegPerSec * mult * Time.deltaTime;
 
@@ -56,8 +56,8 @@ public class AB_RobotController : MonoBehaviour
         {
             var ab = joints[i]; if (!ab) continue;
 
-            bool inc = (i < increaseKeys.Length) && increaseKeys[i] != KeyCode.None && Input.GetKey(increaseKeys[i]);
-            bool dec = (i < decreaseKeys.Length) && decreaseKeys[i] != KeyCode.None && Input.GetKey(decreaseKeys[i]);
+            bool inc = (i < increaseKeys.Length) && increaseKeys[i] != KeyCode.None && Assets.Scripts.GlobalInputManager.GetKey(increaseKeys[i]);
+            bool dec = (i < decreaseKeys.Length) && decreaseKeys[i] != KeyCode.None && Assets.Scripts.GlobalInputManager.GetKey(decreaseKeys[i]);
 
             if (inc && !dec) targets[i] += step;
             if (dec && !inc) targets[i] -= step;
@@ -71,7 +71,7 @@ public class AB_RobotController : MonoBehaviour
         }
 
         // Zero all joints (optional)
-        if (Input.GetKeyDown(zeroAllKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(zeroAllKey))
         {
             for (int i = 0; i < joints.Length; i++)
             {

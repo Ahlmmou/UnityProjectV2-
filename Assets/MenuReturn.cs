@@ -5,7 +5,7 @@ public class MenuReturn : MonoBehaviour
 {
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.W))
         {
             Debug.Log("BACK TO MENU (W KEY)");
             SceneManager.LoadScene("BasicScene");

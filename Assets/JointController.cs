@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// Keeps links connected, locks unwanted motion, and isolates robot control from player input.
@@ -29,25 +29,25 @@ public class JointController : MonoBehaviour
             ArticulationBody joint = joints[i];
             if (joint == null) continue;
 
-            // ✅ Keep the parent–child connection (don’t reparent!)
-            // ✅ Align anchors so they're connected
+            // ? Keep the parent�child connection (don�t reparent!)
+            // ? Align anchors so they're connected
             joint.anchorPosition = Vector3.zero;
             joint.parentAnchorPosition = Vector3.zero;
 
-            // ✅ Lock all translation (no sliding)
+            // ? Lock all translation (no sliding)
             joint.linearLockX = ArticulationDofLock.LockedMotion;
             joint.linearLockY = ArticulationDofLock.LockedMotion;
             joint.linearLockZ = ArticulationDofLock.LockedMotion;
 
-            // ✅ Allow only rotation around its configured twist axis
+            // ? Allow only rotation around its configured twist axis
             joint.twistLock = ArticulationDofLock.LimitedMotion;
             joint.swingYLock = ArticulationDofLock.LockedMotion;
             joint.swingZLock = ArticulationDofLock.LockedMotion;
 
-            // ✅ Prevent gravity pulling links apart
+            // ? Prevent gravity pulling links apart
             joint.useGravity = false;
 
-            // ✅ Ensure correct joint type
+            // ? Ensure correct joint type
             if (joint.jointType != ArticulationJointType.FixedJoint)
                 joint.jointType = ArticulationJointType.RevoluteJoint;
         }
@@ -64,23 +64,23 @@ public class JointController : MonoBehaviour
             joints[i].xDrive = drive;
         }
 
-        // 🔄 Toggle robot control
-        if (Input.GetKeyDown(KeyCode.F))
+        // ?? Toggle robot control
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.F))
             controlEnabled = !controlEnabled;
 
-        if (!controlEnabled) return; // 🧠 stop reading input if disabled
+        if (!controlEnabled) return; // ?? stop reading input if disabled
 
-        // --- Robot manual control (use F1–F5 & Z–V) ---
-        if (Input.GetKey(KeyCode.F1)) targetAngles[0] += 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.F2)) targetAngles[1] += 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.F3)) targetAngles[2] += 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.F4)) targetAngles[3] += 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.F5)) targetAngles[4] += 20f * Time.deltaTime;
+        // --- Robot manual control (use F1�F5 & Z�V) ---
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.F1)) targetAngles[0] += 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.F2)) targetAngles[1] += 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.F3)) targetAngles[2] += 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.F4)) targetAngles[3] += 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.F5)) targetAngles[4] += 20f * Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.Z)) targetAngles[0] -= 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.X)) targetAngles[1] -= 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.C)) targetAngles[2] -= 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.V)) targetAngles[3] -= 20f * Time.deltaTime;
-        if (Input.GetKey(KeyCode.B)) targetAngles[4] -= 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.Z)) targetAngles[0] -= 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.X)) targetAngles[1] -= 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.C)) targetAngles[2] -= 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.V)) targetAngles[3] -= 20f * Time.deltaTime;
+        if (Assets.Scripts.GlobalInputManager.GetKey(KeyCode.B)) targetAngles[4] -= 20f * Time.deltaTime;
     }
 }

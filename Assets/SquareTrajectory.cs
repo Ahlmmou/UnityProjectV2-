@@ -70,7 +70,7 @@ public class SquareTrajectory : MonoBehaviour
     void Update()
     {
         // Check if the 'S' key is pressed and the robot is not already moving
-        if (Input.GetKeyDown(KeyCode.S) && !isMoving)
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.S) && !isMoving)
         {
             StartSquare();
         }

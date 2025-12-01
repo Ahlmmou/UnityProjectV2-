@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class EndEffectorErrorCalculator : MonoBehaviour
 {
@@ -21,19 +21,19 @@ public class EndEffectorErrorCalculator : MonoBehaviour
     void Update()
     {
         // Switch target with C / V (industry style)
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.C))
         {
             activeTarget = targetA;
             Debug.Log("Active Target set to Target A.");
         }
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.V))
         {
             activeTarget = targetB;
             Debug.Log("Active Target set to Target B.");
         }
 
         // Compute error when pressing E
-        if (Input.GetKeyDown(measureKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(measureKey))
         {
             ComputePositionError();
         }
@@ -50,7 +50,7 @@ public class EndEffectorErrorCalculator : MonoBehaviour
         Vector3 eePos = endEffector.position;
         Vector3 targetPos = activeTarget.position;
 
-        // POSITION ERROR VECTOR (EE → Target)
+        // POSITION ERROR VECTOR (EE ? Target)
         Vector3 error = targetPos - eePos;
 
         // ABSOLUTE XYZ ERROR (magnitudes)

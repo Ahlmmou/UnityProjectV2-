@@ -91,7 +91,7 @@ public class ProximityChatActivator : MonoBehaviour
         if (isPlayerInRange)
         {
             // Toggle chat visibility when the activation key is pressed
-            if (chatPanel != null && chatInputField != null && Input.GetKeyDown(activationKey))
+            if (chatPanel != null && chatInputField != null && Assets.Scripts.GlobalInputManager.GetKeyDown(activationKey))
             {
                 SetChatActive(!chatPanel.activeSelf);
             }

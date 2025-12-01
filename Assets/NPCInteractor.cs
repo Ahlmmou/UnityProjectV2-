@@ -1,4 +1,3 @@
-//using Google.GenerativeAI; // REQUIRED for the GeminiChat type
 using System.Collections;
 using TMPro; // REQUIRED for TextMesh Pro UI types
 using Assets.Scripts;
@@ -45,6 +44,142 @@ public class NPCInteractor : MonoBehaviour
         {
             promptCanvas.SetActive(false);
         }
+        
+        // Apply modern styling
+        ApplyModernStyle();
+    }
+    
+    /// <summary>
+    /// Applies modern dark theme with glassmorphism and vibrant colors
+    /// </summary>
+    private void ApplyModernStyle()
+    {
+        if (chatUIPanel == null) return;
+        
+        // Create rounded sprite
+        Sprite roundedSprite = CreateRoundedSprite();
+        
+        // Style the main chat panel
+        UnityEngine.UI.Image panelBg = chatUIPanel.GetComponent<UnityEngine.UI.Image>();
+        if (panelBg == null) panelBg = chatUIPanel.AddComponent<UnityEngine.UI.Image>();
+        panelBg.sprite = roundedSprite;
+        panelBg.color = new Color(0.1f, 0.1f, 0.12f, 0.98f); // Deep dark background
+        
+        // Style the output text area
+        if (chatOutputText != null)
+        {
+            UnityEngine.UI.Image outputBg = chatOutputText.GetComponent<UnityEngine.UI.Image>();
+            if (outputBg == null && chatOutputText.transform.parent != null)
+            {
+                outputBg = chatOutputText.transform.parent.GetComponent<UnityEngine.UI.Image>();
+                if (outputBg == null) outputBg = chatOutputText.transform.parent.gameObject.AddComponent<UnityEngine.UI.Image>();
+            }
+            if (outputBg != null)
+            {
+                outputBg.sprite = roundedSprite;
+                outputBg.color = new Color(0.15f, 0.15f, 0.18f, 0.95f);
+            }
+            
+            chatOutputText.color = new Color(0.95f, 0.95f, 0.95f);
+            chatOutputText.fontSize = Mathf.Max(chatOutputText.fontSize, 16);
+        }
+        
+        // Style the input field
+        if (inputField != null)
+        {
+            UnityEngine.UI.Image inputBg = inputField.GetComponent<UnityEngine.UI.Image>();
+            if (inputBg == null) inputBg = inputField.gameObject.AddComponent<UnityEngine.UI.Image>();
+            inputBg.sprite = roundedSprite;
+            inputBg.color = new Color(0.2f, 0.2f, 0.25f, 1.0f);
+            
+            if (inputField.textComponent != null)
+            {
+                inputField.textComponent.color = Color.white;
+                inputField.textComponent.fontSize = Mathf.Max(inputField.textComponent.fontSize, 16);
+            }
+            
+            if (inputField.placeholder != null && inputField.placeholder is TMP_Text placeholder)
+            {
+                placeholder.color = new Color(0.6f, 0.6f, 0.6f, 0.7f);
+                placeholder.text = "Type your message...";
+            }
+        }
+        
+        // Find and style the Send button if it exists
+        UnityEngine.UI.Button sendBtn = chatUIPanel.GetComponentInChildren<UnityEngine.UI.Button>();
+        if (sendBtn != null)
+        {
+            UnityEngine.UI.Image btnBg = sendBtn.GetComponent<UnityEngine.UI.Image>();
+            if (btnBg == null) btnBg = sendBtn.gameObject.AddComponent<UnityEngine.UI.Image>();
+            btnBg.sprite = roundedSprite;
+            btnBg.color = new Color(0.0f, 0.5f, 1.0f, 1.0f); // Vibrant Blue
+            
+            TMP_Text btnText = sendBtn.GetComponentInChildren<TMP_Text>();
+            if (btnText != null)
+            {
+                btnText.color = Color.white;
+                btnText.fontStyle = FontStyles.Bold;
+                btnText.fontSize = Mathf.Max(btnText.fontSize, 16);
+            }
+        }
+    }
+    
+    private Sprite CreateRoundedSprite()
+    {
+        int size = 128;
+        int radius = 32;
+        Texture2D tex = new Texture2D(size, size, TextureFormat.ARGB32, false);
+        Color[] colors = new Color[size * size];
+        Color c = Color.white;
+        
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                bool inCorner = false;
+                float dist = 0;
+                
+                if (x < radius && y < radius)
+                {
+                    dist = Vector2.Distance(new Vector2(x, y), new Vector2(radius, radius));
+                    inCorner = true;
+                }
+                else if (x > size - radius && y < radius)
+                {
+                    dist = Vector2.Distance(new Vector2(x, y), new Vector2(size - radius, radius));
+                    inCorner = true;
+                }
+                else if (x < radius && y > size - radius)
+                {
+                    dist = Vector2.Distance(new Vector2(x, y), new Vector2(radius, size - radius));
+                    inCorner = true;
+                }
+                else if (x > size - radius && y > size - radius)
+                {
+                    dist = Vector2.Distance(new Vector2(x, y), new Vector2(size - radius, size - radius));
+                    inCorner = true;
+                }
+                
+                if (inCorner)
+                {
+                    if (dist <= radius - 1)
+                        colors[y * size + x] = c;
+                    else if (dist <= radius)
+                        colors[y * size + x] = new Color(c.r, c.g, c.b, c.a * (radius - dist));
+                    else
+                        colors[y * size + x] = Color.clear;
+                }
+                else
+                {
+                    colors[y * size + x] = c;
+                }
+            }
+        }
+        
+        tex.SetPixels(colors);
+        tex.Apply();
+        
+        return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100, 0, SpriteMeshType.FullRect, new Vector4(radius, radius, radius, radius));
     }
 
     void Update()
@@ -56,7 +191,7 @@ public class NPCInteractor : MonoBehaviour
             if (promptCanvas != null) promptCanvas.SetActive(true);
 
             // Check for the Interaction Keypress
-            if (Input.GetKeyDown(INTERACT_KEY))
+            if (Assets.Scripts.GlobalInputManager.GetKeyDown(INTERACT_KEY))
             {
                 ActivateChat();
             }
@@ -71,14 +206,14 @@ public class NPCInteractor : MonoBehaviour
         if (isChatActive)
         {
             // Check for Enter/Return key press
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Return) || Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.KeypadEnter))
             {
-                SendMessage();
+                SendChatMessage(); // Renamed to avoid conflict with Unity's SendMessage
             }
         }
 
         // 3. Allow player to close the chat using the same key
-        if (isChatActive && Input.GetKeyDown(INTERACT_KEY))
+        if (isChatActive && Assets.Scripts.GlobalInputManager.GetKeyDown(INTERACT_KEY))
         {
             DeactivateChat();
         }
@@ -91,8 +226,9 @@ public class NPCInteractor : MonoBehaviour
         isChatActive = true;
         chatUIPanel.SetActive(true); // Show the main UI
 
-        // Set the initial message and focus the input field
-        chatOutputText.text = "Hello! I am the Robot NPC. What is your question?";
+        // Set the initial message with modern colors
+        string colorHex = ColorUtility.ToHtmlStringRGB(new Color(0.0f, 1.0f, 0.6f));
+        chatOutputText.text = $"<color=#{colorHex}><b>Robot NPC:</b></color> Hello! I am your VR assistant. How can I help you today?";
         inputField.ActivateInputField(); // Focus the input
     }
 
@@ -102,7 +238,7 @@ public class NPCInteractor : MonoBehaviour
         chatUIPanel.SetActive(false); // Hide the main UI
     }
 
-    public void SendMessage() // Made public so it can be called by a UI Button too
+    public void SendChatMessage() // Renamed from SendMessage to avoid Unity conflicts
     {
         // Use .text from the TMP_InputField
         string userMessage = inputField.text;
@@ -113,26 +249,36 @@ public class NPCInteractor : MonoBehaviour
         // 1. Clear input and show a waiting message
         inputField.text = "";
 
-        // Display the user's message and a waiting message for the AI
-        chatOutputText.text = $"You: {userMessage}\n\nRobot NPC: ...Thinking...";
+        // Display the user's message with vibrant blue color
+        string userColorHex = ColorUtility.ToHtmlStringRGB(new Color(0.3f, 0.65f, 1.0f));
+        string botColorHex = ColorUtility.ToHtmlStringRGB(new Color(0.0f, 1.0f, 0.6f));
+        chatOutputText.text = $"<color=#{userColorHex}><b>You:</b></color> {userMessage}\n\n<color=#{botColorHex}><b>Robot NPC:</b></color> Thinking...";
 
-        // 2. Start the API call using the Coroutine from the GeminiChat script
-        // Note: We check if the geminiChat script is linked before calling
+        // 2. Use the new GeminiChat.SendMessage API
         if (geminiChat != null)
         {
-            StartCoroutine(geminiChat.SendMessageToGemini(userMessage, OnGeminiResponseReceived));
+            geminiChat.SendMessage(userMessage, 
+                onComplete: OnGeminiResponseReceived,
+                onError: (error) => {
+                    string errorColorHex = ColorUtility.ToHtmlStringRGB(new Color(1f, 0.3f, 0.3f));
+                    chatOutputText.text = $"<color=#{errorColorHex}><b>Error:</b></color> {error}";
+                    inputField.ActivateInputField();
+                }
+            );
         }
         else
         {
-            chatOutputText.text = "Error: GeminiChat script not linked!";
+            string errorColorHex = ColorUtility.ToHtmlStringRGB(new Color(1f, 0.3f, 0.3f));
+            chatOutputText.text = $"<color=#{errorColorHex}><b>Error:</b></color> GeminiChat script not linked!";
         }
     }
 
-    // Callback function passed to GeminiChat.SendMessageToGemini
+    // Callback function for when response is received
     void OnGeminiResponseReceived(string reply)
     {
         // 3. Update the UI with the final response
-        chatOutputText.text = $"Robot NPC: {reply}";
+        string botColorHex = ColorUtility.ToHtmlStringRGB(new Color(0.0f, 1.0f, 0.6f));
+        chatOutputText.text = $"<color=#{botColorHex}><b>Robot NPC:</b></color> {reply}";
         inputField.ActivateInputField(); // Re-focus the input for the next message
     }
 
@@ -140,8 +286,6 @@ public class NPCInteractor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the entering object is the Player (you might need to check for a Player tag/component here)
-        // For now, we compare the entered collider's transform to the player reference.
         if (other.transform == player)
         {
             isPlayerInRange = true;
@@ -155,11 +299,18 @@ public class NPCInteractor : MonoBehaviour
             isPlayerInRange = false;
             if (promptCanvas != null) promptCanvas.SetActive(false);
 
-            // If the player walks away, close the chat UI
-            if (isChatActive)
-            {
-                DeactivateChat();
-            }
+            // NOTE: Chat will NOT auto-close when player moves away
+            // User must manually press X to close the chat interface
+            // This prevents accidental closure while typing (WASD movement keys)
         }
+    }
+
+    /// <summary>
+    /// Check if the chat input field is currently focused.
+    /// Used by GlobalInputManager to block other inputs while typing.
+    /// </summary>
+    public bool IsInputActive()
+    {
+        return isChatActive && inputField != null && inputField.isFocused;
     }
 }

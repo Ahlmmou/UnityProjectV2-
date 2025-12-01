@@ -16,7 +16,7 @@ public class MovingTarget : MonoBehaviour
     void Update()
     {
         // Start motion when S is pressed
-        if (!active && Input.GetKeyDown(KeyCode.S))
+        if (!active && Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.S))
             active = true;
 
         if (!active) return;

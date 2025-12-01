@@ -34,7 +34,7 @@ public class ChatUIManager : MonoBehaviour
     void Update()
     {
         // --- X toggles chat open / close ---
-        if (Input.GetKeyDown(toggleChatKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(toggleChatKey))
         {
             if (isOpen) CloseChat();
             else OpenChat();
@@ -43,7 +43,7 @@ public class ChatUIManager : MonoBehaviour
         if (!isOpen) return;
 
         // --- ENTER sends message ---
-        if (Input.GetKeyDown(sendKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(sendKey))
         {
             TrySendMessage();
         }
@@ -123,20 +123,28 @@ public class ChatUIManager : MonoBehaviour
         isSending = true;
         AppendLine("<b>Bot:</b> thinking...");
 
-        string lastResponse = null;
-
-        yield return StartCoroutine(
-            geminiChat.SendMessageToGemini(msg, (resp) => { lastResponse = resp; })
+        // Use the new API with callbacks
+        geminiChat.SendMessage(msg, 
+            onComplete: (response) => {
+                // Replace "thinking..." with the actual bot message
+                ReplaceLastLine($"<b>Bot:</b> {response}");
+                isSending = false;
+                
+                // Restore focus
+                inputField.ActivateInputField();
+                inputField.Select();
+            },
+            onError: (error) => {
+                ReplaceLastLine($"<b>Bot:</b> Error: {error}");
+                isSending = false;
+                
+                // Restore focus
+                inputField.ActivateInputField();
+                inputField.Select();
+            }
         );
-
-        // Replace "thinking..." with the actual bot message
-        ReplaceLastLine($"<b>Bot:</b> {lastResponse}");
-
-        isSending = false;
-
-        // Restore focus
-        inputField.ActivateInputField();
-        inputField.Select();
+        
+        yield break; // No need to wait, callbacks handle the response
     }
 
     private void AppendLine(string line)
@@ -164,5 +172,13 @@ public class ChatUIManager : MonoBehaviour
             text = text.Substring(0, lastNewLine);
 
         outputText.text = text + "\n" + newLine;
+    }
+    
+    /// <summary>
+    /// Check if this chat UI's input field is currently active
+    /// </summary>
+    public bool IsInputActive()
+    {
+        return isOpen && inputField != null && inputField.isFocused;
     }
 }

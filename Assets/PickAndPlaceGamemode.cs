@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
@@ -9,7 +9,7 @@ public class PickAndPlaceGamemode : MonoBehaviour
     public PickPlaceTaskManager task;
 
     [Header("VFX")]
-    public ParticleSystem[] successVfxAtBins;   // ← drag your confetti particles here
+    public ParticleSystem[] successVfxAtBins;   // ? drag your confetti particles here
 
     [Header("UI")]
     public TMP_Text scoreText;
@@ -43,7 +43,7 @@ public class PickAndPlaceGamemode : MonoBehaviour
     void Update()
     {
         // Start or restart with B
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.B))
             StartRound();
 
         if (!running || task == null)
@@ -64,7 +64,7 @@ public class PickAndPlaceGamemode : MonoBehaviour
             lastScore = task.score;
             combo += delta;
 
-            // 🎉 Play confetti for EXACTLY 1 second
+            // ?? Play confetti for EXACTLY 1 second
             PlayConfetti();
 
             // Goal reached?
@@ -76,7 +76,7 @@ public class PickAndPlaceGamemode : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // ⭐ CONFETTI SYSTEM ⭐
+    // ? CONFETTI SYSTEM ?
     // ----------------------------------------------------------------------
 
     void PlayConfetti()
@@ -96,7 +96,7 @@ public class PickAndPlaceGamemode : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // ⭐ ROUND CONTROL ⭐
+    // ? ROUND CONTROL ?
     // ----------------------------------------------------------------------
 
     public void StartRound()
@@ -112,7 +112,7 @@ public class PickAndPlaceGamemode : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------
-    // ⭐ UI UPDATE ⭐
+    // ? UI UPDATE ?
     // ----------------------------------------------------------------------
 
     void UpdateHUD()

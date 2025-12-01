@@ -17,8 +17,15 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         // Read keyboard input (arrows or WASD both work)
-        float x = Input.GetAxis("Horizontal"); // ? ? or A D
-        float z = Input.GetAxis("Vertical");   // ? ? or W S
+        float x = 0f;
+        float z = 0f;
+
+        // Only read input if chat is NOT active
+        if (!Assets.Scripts.ChatbotInputHelper.IsChatbotInputActive())
+        {
+            x = Input.GetAxis("Horizontal"); // ? ? or A D
+            z = Input.GetAxis("Vertical");   // ? ? or W S
+        }
 
         // Convert input to world direction
         Vector3 move = transform.right * x + transform.forward * z;

@@ -28,8 +28,15 @@ public class PlayerMovementWithButtonSteps : MonoBehaviour
     void Update()
     {
         // --- Movement input ---
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveZ = Input.GetAxisRaw("Vertical");
+        float moveX = 0f;
+        float moveZ = 0f;
+
+        // Only read input if chat is NOT active
+        if (!Assets.Scripts.ChatbotInputHelper.IsChatbotInputActive())
+        {
+            moveX = Input.GetAxisRaw("Horizontal");
+            moveZ = Input.GetAxisRaw("Vertical");
+        }
         Vector3 move = (transform.right * moveX + transform.forward * moveZ).normalized;
 
         // Apply movement

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
 public class AB_TargetErrorMeasurer : MonoBehaviour
@@ -27,7 +27,7 @@ public class AB_TargetErrorMeasurer : MonoBehaviour
     private void Update()
     {
         // Choose Target 0
-        if (Input.GetKeyDown(target0Key) && targets.Length > 0 && targets[0] != null)
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(target0Key) && targets.Length > 0 && targets[0] != null)
         {
             currentTargetIndex = 0;
             UpdateInfoText("Target A selected.\nMove the robot using the AB controller, then press X.");
@@ -35,7 +35,7 @@ public class AB_TargetErrorMeasurer : MonoBehaviour
         }
 
         // Choose Target 1
-        if (Input.GetKeyDown(target1Key) && targets.Length > 1 && targets[1] != null)
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(target1Key) && targets.Length > 1 && targets[1] != null)
         {
             currentTargetIndex = 1;
             UpdateInfoText("Target B selected.\nMove the robot using the AB controller, then press X.");
@@ -43,12 +43,12 @@ public class AB_TargetErrorMeasurer : MonoBehaviour
         }
 
         // Mark reached & compute error
-        if (Input.GetKeyDown(markReachedKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(markReachedKey))
         {
             if (currentTargetIndex < 0)
             {
-                UpdateInfoText("⚠️ No target selected. Press C or V first.");
-                Debug.LogWarning("[AB_TargetErrorMeasurer] Cannot mark — no target selected.");
+                UpdateInfoText("?? No target selected. Press C or V first.");
+                Debug.LogWarning("[AB_TargetErrorMeasurer] Cannot mark � no target selected.");
                 return;
             }
 

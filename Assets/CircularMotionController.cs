@@ -73,7 +73,7 @@ public class CircularMotionController : MonoBehaviour
     void Update()
     {
         // Only allow key press if not currently moving OR returning
-        if (Input.GetKeyDown(toggleKey) && !isMoving && !isReturning)
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(toggleKey) && !isMoving && !isReturning)
         {
             StartMotion();
         }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Assets.Scripts;
 
 public class ChatPanelToggle : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class ChatPanelToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(toggleKey))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(toggleKey))
         {
             if (chatPanel != null && chatPanel.activeSelf)
                 CloseChat();

@@ -6,7 +6,7 @@ public class InstructionPanelToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.A))
         {
             panel.SetActive(!panel.activeSelf);
         }

@@ -12,10 +12,15 @@ public class PlayerMovementWithButtonSteps : MonoBehaviour
     public float stepInterval = 0.5f;  // seconds between steps when walking
     public Vector2 randomPitch = new Vector2(0.95f, 1.05f);
 
+    [Header("Movement Orientation")]
+    [Tooltip("Optional: set to the camera or any transform whose yaw defines forward. If empty, will try Camera.main, else this transform.")]
+    public Transform moveOrientation;
+
     private CharacterController controller;
     private AudioSource audioSource;
     private Vector3 velocity;
     private float stepTimer = 0f;
+    private Transform fallbackCamera;
 
     void Start()
     {
@@ -23,14 +28,23 @@ public class PlayerMovementWithButtonSteps : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f;  // 3D sound
+        fallbackCamera = Camera.main ? Camera.main.transform : null;
     }
 
     void Update()
     {
         // --- Movement input ---
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveZ = Input.GetAxisRaw("Vertical");
-        Vector3 move = (transform.right * moveX + transform.forward * moveZ).normalized;
+        float moveX = 0f;
+        float moveZ = 0f;
+
+        // Only read input if chat is NOT active
+        if (!Assets.Scripts.ChatbotInputHelper.IsChatbotInputActive())
+        {
+            moveX = Input.GetAxisRaw("Horizontal");
+            moveZ = Input.GetAxisRaw("Vertical");
+        }
+        GetPlanarBasis(out Vector3 fwd, out Vector3 right);
+        Vector3 move = (right * moveX + fwd * moveZ).normalized;
 
         // Apply movement
         controller.Move(move * speed * Time.deltaTime);
@@ -67,5 +81,19 @@ public class PlayerMovementWithButtonSteps : MonoBehaviour
         int n = (footstepSounds.Length == 1) ? 0 : Random.Range(0, footstepSounds.Length);
         audioSource.pitch = Random.Range(randomPitch.x, randomPitch.y);
         audioSource.PlayOneShot(footstepSounds[n]);
+    }
+
+    // Build right/forward on the horizontal plane from the chosen orientation so input isn't affected by player rotation.
+    private void GetPlanarBasis(out Vector3 fwd, out Vector3 right)
+    {
+        Transform basis = moveOrientation ? moveOrientation : (fallbackCamera ? fallbackCamera : transform);
+        fwd = basis.forward; fwd.y = 0f;
+        right = basis.right; right.y = 0f;
+
+        if (fwd.sqrMagnitude < 1e-6f) fwd = Vector3.forward;
+        if (right.sqrMagnitude < 1e-6f) right = Vector3.right;
+
+        fwd.Normalize();
+        right.Normalize();
     }
 }

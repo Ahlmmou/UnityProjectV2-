@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ChatScrollController : MonoBehaviour
@@ -14,18 +14,18 @@ public class ChatScrollController : MonoBehaviour
 
     void Update()
     {
-        // 🔑 NEW CHECK: Only proceed if the chatbotPanel is active in the hierarchy.
+        // ?? NEW CHECK: Only proceed if the chatbotPanel is active in the hierarchy.
         // This stops the key presses from scrolling the chat when it's hidden.
         if (chatbotPanel != null && chatbotPanel.activeInHierarchy)
         {
             // Check for the Down Arrow key press
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.DownArrow))
             {
                 ScrollDown();
             }
 
             // Check for the Up Arrow key press
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.UpArrow))
             {
                 ScrollUp();
             }

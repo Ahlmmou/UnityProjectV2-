@@ -27,18 +27,18 @@ public class IKAngleSetter : MonoBehaviour
     void Update()
     {
         // -------- Select joint with keys 1..5 --------
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectJoint(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectJoint(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) SelectJoint(2);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) SelectJoint(3);
-        if (Input.GetKeyDown(KeyCode.Alpha5)) SelectJoint(4);
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Alpha1)) SelectJoint(0);
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Alpha2)) SelectJoint(1);
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Alpha3)) SelectJoint(2);
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Alpha4)) SelectJoint(3);
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.Alpha5)) SelectJoint(4);
 
         // -------- Rotate selected joint with arrows --------
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.UpArrow))
         {
             AdjustCurrentJointAngle(+angleStep);
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(KeyCode.DownArrow))
         {
             AdjustCurrentJointAngle(-angleStep);
         }

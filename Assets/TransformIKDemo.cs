@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
 /// <summary>
@@ -58,7 +58,7 @@ public class TransformIKDemo : MonoBehaviour
             jointAxesLocal = new Vector3[joints.Length];
             for (int i = 0; i < joints.Length; i++)
             {
-                jointAxesLocal[i] = Vector3.forward; // (0,0,1) → local Z
+                jointAxesLocal[i] = Vector3.forward; // (0,0,1) ? local Z
             }
         }
     }
@@ -66,13 +66,13 @@ public class TransformIKDemo : MonoBehaviour
     private void Update()
     {
         // Select target 0 (C)
-        if (Input.GetKeyDown(target0Key) && targets.Length > 0 && targets[0] != null)
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(target0Key) && targets.Length > 0 && targets[0] != null)
         {
             StartSolving(0);
         }
 
         // Select target 1 (V)
-        if (Input.GetKeyDown(target1Key) && targets.Length > 1 && targets[1] != null)
+        if (Assets.Scripts.GlobalInputManager.GetKeyDown(target1Key) && targets.Length > 1 && targets[1] != null)
         {
             StartSolving(1);
         }
